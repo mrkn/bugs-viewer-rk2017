@@ -1,0 +1,18 @@
+%h1 UserStats
+
+= form_tag user_stats_path, method: :post do
+  = select_tag 'member_id', options_from_collection_for_select(@users, :id, :name, selected: [@member_stats.member_id].compact)
+  = submit_tag 'Show'
+
+- if @member_stats
+  %h2 Issue status summary
+  - script, div = *@member_stats.render_status_summary_chart
+  .summary-chart
+    = raw div
+
+  .clear
+  %h2 Issue list
+  .issue-list
+    = raw @member_stats.issue_list
+
+  = raw script
