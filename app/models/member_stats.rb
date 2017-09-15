@@ -7,24 +7,27 @@ class MemberStats
   attr_reader :project_id, :member_id
 
   def render_status_summary
-    Pandas::DataFrame.new(status_summary).to_html.force_encoding('UTF-8')
+    Pandas::DataFrame.new(status_summary).to_html
   end
 
   def render_status_summary_chart
-    bokeh = PyCall.import_module('bokeh')
+    models = PyCall.import_module('bokeh.models')
+    plotting = PyCall.import_module('bokeh.plotting')
+    embed = PyCall.import_module('bokeh.embed')
+
     data = data_frame.groupby('status')[['id']].count()
-    source = bokeh.models.ColumnDataSource.new(data: data)
+    source = models.ColumnDataSource.new(data: data)
     x_range = [0, data['id'].max + 50]
-    plot = bokeh.plotting.figure(plot_width: 600, plot_height: 300,
+    plot = plotting.figure(plot_width: 600, plot_height: 300,
                                  y_range: data_frame['status'].unique.tolist,
                                  x_range: x_range,
                                  toolbar_location: nil, tools: "")
     plot.hbar(y: 'status', right: 'id', height: 0.5, source: source)
-    labels = bokeh.models.LabelSet.new(y: 'status', x: 'id', text: 'id',
+    labels = models.LabelSet.new(y: 'status', x: 'id', text: 'id',
                                        level: 'glyph', y_offset: -10.0, x_offset: 5.0,
                                        source: source, render_mode: 'canvas')
     plot.add_layout(labels)
-    bokeh.embed.components(plot)
+    embed.components(plot)
   end
 
   def status_summary
@@ -32,7 +35,7 @@ class MemberStats
   end
 
   def issue_list
-    data_frame.to_html.force_encoding('UTF-8')
+    data_frame.to_html
   end
 
   def data_frame

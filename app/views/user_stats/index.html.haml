@@ -1,7 +1,7 @@
 %h1 UserStats
 
 = form_tag user_stats_path, method: :post do
-  = select_tag 'member_id', options_from_collection_for_select(@users, :id, :name, selected: [@member_stats.member_id].compact)
+  = select_tag 'member_id', options_from_collection_for_select(@users, :id, :name, selected: [@member_stats&.member_id].compact)
   = submit_tag 'Show'
 
 - if @member_stats
