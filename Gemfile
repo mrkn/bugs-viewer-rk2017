@@ -16,6 +16,7 @@ gem 'uglifier', '>= 1.3.0'
 
 gem 'jbuilder', '~> 2.5'
 
+gem 'pycall', '>= 1.0.2'
 gem 'pandas'
 
 group :development, :test do
@@ -30,3 +31,5 @@ group :development do
 end
 
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+ruby "2.4.1"
